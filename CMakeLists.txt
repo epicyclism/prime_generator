@@ -4,15 +4,12 @@
 cmake_minimum_required (VERSION 3.8)
 project ("prime_generator")
 
-set_property(GLOBAL PROPERTY CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 add_compile_options(/permissive /Zc:preprocessor)
+endif()
 
-#include_directories("D:/projects/vcpkg/installed/x64-windows/include")
 find_path(RANGE_INCLUDE_DIR range/v3/range.hpp)
 include_directories(${RANGE_INCLUDE_DIR})
-
 
 # Add source to this project's executable.
 add_executable (prime_generator "prime_generator.cpp" )

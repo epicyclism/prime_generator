@@ -4,6 +4,7 @@
 #include <numeric>
 
 #include <range/v3/algorithm.hpp>
+#include <range/v3/numeric.hpp>
 #include <range/v3/view.hpp>
 
 template<typename V>
@@ -17,7 +18,7 @@ private:
 	// store the mesh of the sieve
 	std::vector<p_elt> sieve_;
 	// apply the sieve
-	bool Sieve()
+	bool sieve()
 	{
 		// Decrement each counter and sum the zeroes. Reset the counter.
 		// Any zero at all means current element is a factor and hence current prime_ not actually prime
@@ -47,11 +48,11 @@ private:
 	void next()
 	{
 		++prime_;
-		while (!Sieve())
+		while (!sieve())
 			++prime_;
 		sieve_.emplace_back(prime_, prime_);
 	}
-	constexpr bool equal(ranges::default_sentinel) const
+	constexpr bool equal(ranges::default_sentinel_t) const
 	{
 		return false;
 	}
@@ -65,8 +66,10 @@ public:
 
 int main()
 {
-	auto x = ranges::view::take(prime_generator<unsigned>(), 20);
-	ranges::for_each(x, [](int i) { std::cout << i << ", "; });
+	std::cout << "First 100 primes are - \n";
+	ranges::for_each(prime_generator<int>() | ranges::views::take(100), [](auto p) { std::cout << p << ", "; });
+	std::cout << '\n';
 
-	std::cout << "\n\n";
+	std::cout << "Sum of primes less than 1000 = " <<
+		ranges::accumulate(prime_generator<int>() | ranges::views::take_while([](auto p) { return p < 1000; }), 0) << '\n';
 }
